@@ -8,11 +8,11 @@ import gym
 # Neural net
 import torch
 import torch.optim as optim
-
+from collections import deque
 from nnModel import PolicyNN
 
 
-def train(num_episodes=1000):
+def train(num_episodes=5000, gamma=1):
     """
 
     Trains the neural net
@@ -24,7 +24,7 @@ def train(num_episodes=1000):
     optimizer = optim.Adam(model.parameters(), lr=0.0001)
 
     num_steps = 500
-    ts = []
+    reward_100 = deque(maxlen=100)
     for episode in range(num_episodes):
         state = env.reset()
         probs = []
@@ -36,24 +36,29 @@ def train(num_episodes=1000):
             rewards.append(reward)
             if done:
                 break
+
         # calculates loss function
         # sums all of the rewards (either -1 or 0)
-        R = rewards.sum()
-
-        policy_loss = []
+        # from stackoverflow, use this equation instead
+        # r1 + gamma * r2 + gamma ^ 2 * r3 + gamma ^ 3 * r4...
+        R = sum([r * gamma ** idx for idx, r in enumerate(rewards)])
+        loss = []
         # for each probability, appends the prob * R
         for log_prob in prob:
-            policy_loss.append(-log_prob * R)
-        loss = policy_loss.sum()
-
+            loss.append(-log_prob * R)
+        loss = sum(loss)
+        reward_100.append(R)
         # sets all gradients to 0
         optimizer.zero_grad()
         # accumulates the gradients
         loss.backward()
         # paramter updated based on current parameters
         optimizer.step()
-        # curr_iter
-        ts.append(t)
+        # every 50 iterations print the loss, hopefully decreasing
+        if episode % 100 == 0:
+            print(f'Turn {episode} results in average of {sum(reward_100) / len(reward_100)}')
+
+
     torch.save(model.state_dict(), "model.pth")
 
 

@@ -1,8 +1,7 @@
 import torch.nn
 from torch import nn
-from torch.autograd.grad_mode import F
 from torch.distributions import Categorical
-
+import torch.nn.functional as F
 """
 
 NN Model we will use for the acrobot
@@ -11,6 +10,7 @@ one hidden layer of 12 units and relu activation,
 and output layer of 3 units and softmax
 
 """
+
 
 class PolicyNN(nn.Module):
     def __init__(self):

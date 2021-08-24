@@ -10,26 +10,28 @@ def test(total_sim=100, steps=500):
     model = PolicyNN()
     model.load_state_dict(state_dict)
     model = model.to(device)
-    sum_return = 0
-    sum_times = []
+    sum_return = []
     for _ in range(total_sim):
         # run this simulation 100 times
         state = env.reset()
         # keep track of what stage we are on
+        return_time = []
         for i in range(steps):
             res, _ = model.act(state)
             action = res
             state, reward, done, _ = env.step(action)
+            return_time.append(reward)
             if render:
                 env.render()
             if done:
-                if reward == 1:
-                    sum_return += reward
-                sum_times.append(i)
                 break
+        sum_return.append(sum(return_time))
+        # more like sum up the return values
         # Keep track of the return
-    print(f'Average return: {sum_return / total_sim}')
-    print(f'Average times to return: {sum_times / total_sim}')
+
+    print(f'Average return: {sum(sum_return) / total_sim}')
+    print(f'this is a negative number indication how many turns it takes for the goal to be reached')
+
     if render:
         env.close()
 

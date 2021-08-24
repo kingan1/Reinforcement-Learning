@@ -56,6 +56,7 @@ def select_action_(state):
 ### Step 3: Use reinforcement learning
 
 We will now use reinforcement learning. This was harder than cart_pole becase
+
 1. 3 outputs, not 2
   + had to also customize instead of a range of [0-2], have it [0-1]
 2. Needed more layers
