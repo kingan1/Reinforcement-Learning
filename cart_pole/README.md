@@ -2,7 +2,7 @@
 
 Basic reinforcement learning project to balance a pole on top of a cart.
 
-Designed using Python Machine Learning Second Edition and [bytepawn](https://bytepawn.com/solving-the-cartpole-reinforcement-learning-problem-with-pytorch.html)
+Designed using Python Machine Learning Second Edition and based heavily upon [bytepawn](https://bytepawn.com/solving-the-cartpole-reinforcement-learning-problem-with-pytorch.html)
 
 ## Progression
 
@@ -64,3 +64,10 @@ env.close()
 + Technically this fully passes the reinforcement learning task, but still doesn't use reinforcement learning
 
 ### Step 3: Use reinforcement learning
+
+Since the above worked so well, we will now try and predict how it works.
++ Essentially, our action is determined from the state (arr len4) and returns either 0 or 1.
++ So we will make a neural net to determine, given the state, the probability of 1 or 0
+
+
++ Average return: 199
