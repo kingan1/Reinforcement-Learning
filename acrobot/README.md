@@ -8,10 +8,10 @@ The acrobot system includes two joints and two links, where the joint between th
     + This is 97.5%.
 + The trial can go a maximum of 500 steps.
 + The options are -1 (left), 0 (stay still), or 1 (right)
++ state is represented as  [cos(theta1) sin(theta1) cos(theta2) sin(theta2) thetaDot1 thetaDot2].
 
 
-
-### Step 1
+### Step 0
 Random
 ```python
 import random
@@ -24,105 +24,34 @@ def select_action_(state):
         return 0
     return -1
 ```
-+ Average return: 0
++ Percentage worked: 0
 
-[comment]: <> (### Step 1)
+### Step 1
 
-[comment]: <> (Started first with a version that noted "if the pole angle is going left, make it go right")
+Tried to use some mathematics, no soundproof logic behind it
+```python
+def select_action_(state):
+    top_joint = state[2:4]
+    # cos 1 = pointing down
+    # when the angular velocity slows/stops, go other way
 
-[comment]: <> (```python)
+    s3 = state[4]
+    s4 = state[5]
+    if s3 + s4 < 0.1:
+        # if it's slowing down, go the other way
+        if top_joint[1] < 0:
+            return -1
+        return 1
+    else:
+        if top_joint[1] < 0:
+            return -1
+        elif top_joint[1] == 0:
+            return 0
+        return 1
 
-[comment]: <> (import gym)
+```
 
-[comment]: <> (env = gym.make&#40;'CartPole-v1'&#41;)
-
-[comment]: <> (state = env.reset&#40;&#41;)
-
-[comment]: <> (while True:)
-
-[comment]: <> (    action = 0 if state[2] <= 0 else 1)
-
-[comment]: <> (    state, _, done, _ = env.step&#40;action&#41;)
-
-[comment]: <> (    env.render&#40;&#41;)
-
-[comment]: <> (    if done:)
-
-[comment]: <> (        break)
-
-[comment]: <> (env.close&#40;&#41;)
-
-[comment]: <> (```)
-
-[comment]: <> (+ Average return: 42)
-
-[comment]: <> (+ Issues: does not account for the velocity of the cart, just what direction it is going in.)
-
-[comment]: <> (### Step 2: include velocity)
-
-[comment]: <> (Now instead of just relying on if the pole is going left, we want to account for "how much" it is going left.)
-
-[comment]: <> (Instead of just using pole angle, we also use pole angular velocity.)
-
-[comment]: <> (#### Solution 1)
-
-[comment]: <> (```python)
-
-[comment]: <> (import gym)
-
-[comment]: <> (env = gym.make&#40;'CartPole-v1'&#41;)
-
-[comment]: <> (state = env.reset&#40;&#41;)
-
-[comment]: <> (while True:)
-
-[comment]: <> (    action = 0 if state[2]*state[3] <= 0 else 1)
-
-[comment]: <> (    state, _, done, _ = env.step&#40;action&#41;)
-
-[comment]: <> (    env.render&#40;&#41;)
-
-[comment]: <> (    if done:)
-
-[comment]: <> (        break)
-
-[comment]: <> (env.close&#40;&#41;)
-
-[comment]: <> (```)
-
-[comment]: <> (+ Multiplying the angle by the velocity)
-
-[comment]: <> (+ Average return: 127)
-
-[comment]: <> (#### Solution 2)
-
-[comment]: <> (```python)
-
-[comment]: <> (import gym)
-
-[comment]: <> (env = gym.make&#40;'CartPole-v1'&#41;)
-
-[comment]: <> (state = env.reset&#40;&#41;)
-
-[comment]: <> (while True:)
-
-[comment]: <> (    action = 0 if state[2] + state[3] <= 0 else 1)
-
-[comment]: <> (    state, _, done, _ = env.step&#40;action&#41;)
-
-[comment]: <> (    env.render&#40;&#41;)
-
-[comment]: <> (    if done:)
-
-[comment]: <> (        break)
-
-[comment]: <> (env.close&#40;&#41;)
-
-[comment]: <> (```)
-
-[comment]: <> (+ Average return: 199)
-
-[comment]: <> (+ Technically this fully passes the reinforcement learning task, but still doesn't use reinforcement learning)
++ Percentage worked: 60%
 
 [comment]: <> (### Step 3: Use reinforcement learning)
 
