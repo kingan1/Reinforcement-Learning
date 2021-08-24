@@ -1,4 +1,8 @@
-# First project using reinforcement learning
+"""
+First project using reinforcement learning
+Cart-pole-v1
+"""
+
 
 import gym
 
@@ -96,10 +100,6 @@ def select_action_from_policy_test(model, state):
     state = torch.from_numpy(state).float().unsqueeze(0)
     probs = model(state)
     return 0 if probs[0][0] > probs[0][1] else 1
-    # if probs[0][0] > probs[0][1]:
-    #     return 0
-    # else:
-    #     return 1
 
 
 def test(total_sim=100, steps=200):
