@@ -19,3 +19,4 @@ for _ in range(100):
     sum_return += i
 print(f'Average return: {sum_return / 100}')
 env.close()
+
