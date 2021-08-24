@@ -1,52 +1,64 @@
 """
 
-Replicating cart-pole-v1
+Training the acrobot model
 
 """
+
 import gym
+# Neural net
+import torch
+import torch.optim as optim
+
+from nnModel import PolicyNN
+
+
+def train(num_episodes=1000):
+    """
+
+    Trains the neural net
+    for every episode, it sees how far the pole can get in the simulation.
+    Then it updates everything, and reruns until convergence
+    """
+
+    model = PolicyNN().to(device)
+    optimizer = optim.Adam(model.parameters(), lr=0.0001)
+
+    num_steps = 500
+    ts = []
+    for episode in range(num_episodes):
+        state = env.reset()
+        probs = []
+        rewards = []
+        for t in range(1, num_steps + 1):
+            action, prob = model.act(state)
+            probs.append(prob)
+            state, reward, done, _ = env.step(action)
+            rewards.append(reward)
+            if done:
+                break
+        # calculates loss function
+        # sums all of the rewards (either -1 or 0)
+        R = rewards.sum()
+
+        policy_loss = []
+        # for each probability, appends the prob * R
+        for log_prob in prob:
+            policy_loss.append(-log_prob * R)
+        loss = policy_loss.sum()
+
+        # sets all gradients to 0
+        optimizer.zero_grad()
+        # accumulates the gradients
+        loss.backward()
+        # paramter updated based on current parameters
+        optimizer.step()
+        # curr_iter
+        ts.append(t)
+    torch.save(model.state_dict(), "model.pth")
+
 
 env = gym.make('Acrobot-v1')
+env.seed(0)
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-def select_action_(state):
-    top_joint = state[2:4]
-
-    s3 = state[4]
-    s4 = state[5]
-    if s3 + s4 < 0.1:
-        # if it's slowing down, go the other way
-        if top_joint[1] < 0:
-            return -1
-        return 1
-    else:
-        if top_joint[1] < 0:
-            return -1
-        elif top_joint[1] == 0:
-            return 0
-        return 1
-
-render = False
-
-def test(total_sim=100, steps=500 ):
-    # basic version, if it is going left, go right, etc
-    sum_return = 0
-    happened = []
-    for _ in range(total_sim):
-        # run this simulation 100 times
-        state = env.reset()
-        # keep track of what stage we are on
-        for i in range(steps):
-            res = select_action_(state)
-            action = res
-            state, reward, done, _ = env.step(action)
-            if render:
-                env.render()
-            if reward == 0:
-                sum_return += 1
-                break
-        # Keep track of the return - different for this
-
-    print(f'Worked correctly: {sum_return / total_sim * 100}%')
-    if render:
-        env.close()
-
-test()
+train()

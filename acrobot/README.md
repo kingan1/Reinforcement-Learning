@@ -53,13 +53,12 @@ def select_action_(state):
 
 + Percentage worked: 60%
 
-[comment]: <> (### Step 3: Use reinforcement learning)
+### Step 3: Use reinforcement learning
 
-[comment]: <> (Since the above worked so well, we will now try and predict how it works.)
-
-[comment]: <> (+ Essentially, our action is determined from the state &#40;arr len4&#41; and returns either 0 or 1.)
-
-[comment]: <> (+ So we will make a neural net to determine, given the state, the probability of 1 or 0)
-
-
-[comment]: <> (+ Average return: 199)
+We will now use reinforcement learning. This was harder than cart_pole becase
+1. 3 outputs, not 2
+  + had to also customize instead of a range of [0-2], have it [0-1]
+2. Needed more layers
+  + Before I was able to get away with one layer but now I had to add a hidden input layer
+3. Needed a different loss
+  + Before it was just maximize the amount of turns still active, now I had to minimize the number of turns active.
