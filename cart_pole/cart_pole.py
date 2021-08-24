@@ -10,13 +10,13 @@ for _ in range(100):
     state = env.reset()
     # keep track of what stage we are on
     for i in range(200):
-        action = 1 if state[2] <= 0 else 0
+        action = 0 if state[2] <= 0 else 1
         state, reward, done, _ = env.step(action)
-        env.render()
+        # env.render()
         if done:
             break
     # Keep track of the return
     sum_return += i
 print(f'Average return: {sum_return / 100}')
-env.close()
+# env.close()
 
