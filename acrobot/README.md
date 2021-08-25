@@ -63,3 +63,6 @@ We will now use reinforcement learning. This was harder than cart_pole becase
   + Before I was able to get away with one layer but now I had to add a hidden input layer
 3. Needed a different loss
   + Before it was just maximize the amount of turns still active, now I had to minimize the number of turns active.
+
++ Result with 6 -> 12 -> 3:
+  + Average retirm" -294

@@ -1,15 +1,17 @@
 import torch
 import gym
-
 from acrobot.nnModel import PolicyNN
+
+render = False
+env = gym.make("Acrobot-v1")
+env.seed(0)
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+model = PolicyNN()
+model.load_state_dict(torch.load("model.pth"))
+model = model.to(device)
 
 
 def test(total_sim=100, steps=500):
-    state_dict = torch.load('model.pth')
-
-    model = PolicyNN()
-    model.load_state_dict(state_dict)
-    model = model.to(device)
     sum_return = []
     for _ in range(total_sim):
         # run this simulation 100 times
@@ -26,19 +28,12 @@ def test(total_sim=100, steps=500):
             if done:
                 break
         sum_return.append(sum(return_time))
-        # more like sum up the return values
-        # Keep track of the return
 
-    print(f'Average return: {sum(sum_return) / total_sim}')
-    print(f'this is a negative number indication how many turns it takes for the goal to be reached')
+    print(f"Average return: {sum(sum_return) / total_sim}")
+    print("Negative sum of turns until goal reached")
 
     if render:
         env.close()
 
-
-render = False
-env = gym.make('Acrobot-v1')
-env.seed(0)
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 test()

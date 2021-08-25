@@ -2,11 +2,12 @@ import torch.nn
 from torch import nn
 from torch.distributions import Categorical
 import torch.nn.functional as F
+
 """
 
 NN Model we will use for the acrobot
-NFeed forward eural net with 6 input layers, 
-one hidden layer of 12 units and relu activation, 
+NFeed forward eural net with 6 input layers,
+one hidden layer of 12 units and relu activation,
 and output layer of 3 units and softmax
 
 """
@@ -24,10 +25,6 @@ class PolicyNN(nn.Module):
         # just feeds forward
         x = F.relu(self.fc1(x))
         x = self.fc2(x)
-        # generalization of logistic, takes in parameters and returns a probability
-        # wikipedia:  last activation function of a neural network to normalize
-        #     the output of a network to a probability distribution over predicted output classes,
-        #     based on Luce's choice axiom.
         return F.softmax(x, dim=1)
 
     def act(self, state):
@@ -39,5 +36,4 @@ class PolicyNN(nn.Module):
         m = Categorical(probs)
         # gets the highest prob
         action = m.sample()
-        return action.item()-1, m.log_prob(action)
-
+        return action.item() - 1, m.log_prob(action)

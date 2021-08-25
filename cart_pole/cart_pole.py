@@ -23,10 +23,11 @@ class PolicyNN(nn.Module):
     def forward(self, x):
         # just feeds forward
         x = self.fc(x)
-        # generalization of logistic, takes in parameters and returns a probability
+        # generalization of logistic,
+        #   takes in parameters and returns a probability
         # wikipedia:  last activation function of a neural network to normalize
-        #     the output of a network to a probability distribution over predicted output classes,
-        #     based on Luce's choice axiom.
+        #     the output of a network to a probability distribution
+        #     over predicted output classes, based on Luce's choice axiom.
         return F.softmax(x, dim=1)
 
 
@@ -52,7 +53,7 @@ def select_action_from_policy_best(model, state):
         return 1
 
 
-env = gym.make('CartPole-v1')
+env = gym.make("CartPole-v1")
 render = False
 
 
@@ -88,7 +89,7 @@ def train_simple(num_episodes=10000):
         ts.append(t)
         # check stopping condition:
         if len(ts) > 10 and sum(ts[-10:]) / 10.0 >= num_steps * 0.95:
-            print('Converged')
+            print("Converged")
             return
 
 
@@ -119,7 +120,7 @@ def test(total_sim=100, steps=200):
                 break
         # Keep track of the return
         sum_return += i
-    print(f'Average return: {sum_return / total_sim}')
+    print(f"Average return: {sum_return / total_sim}")
     if render:
         env.close()
 
