@@ -6,8 +6,8 @@ render = False
 env = gym.make("Acrobot-v1")
 env.seed(0)
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-model = PolicyNN()
-model.load_state_dict(torch.load("model.pth"))
+model = PolicyNN(n_intermediate=30)
+model.load_state_dict(torch.load("./model.pth"))
 model = model.to(device)
 
 

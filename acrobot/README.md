@@ -65,4 +65,11 @@ We will now use reinforcement learning. This was harder than cart_pole becase
   + Before it was just maximize the amount of turns still active, now I had to minimize the number of turns active.
 
 + Result with 6 -> 12 -> 3:
-  + Average retirm" -294
+  + Average return -294
+  
+### Issue: wrong loss
+At this point I realized my loss function was calculated wrong.
+I was saying `loss = loss.sum()` which is different than `loss = torch.cat(loss).sum()`
+
+This was making my loss function wrong, making the backward wrong, making my model not be properly configured.
+I fixed this issue, and increased my neural net size to 6 -> 30 -> 3.

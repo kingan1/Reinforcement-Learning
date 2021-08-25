@@ -14,12 +14,12 @@ and output layer of 3 units and softmax
 
 
 class PolicyNN(nn.Module):
-    def __init__(self):
+    def __init__(self, n_intermediate=24):
         super(PolicyNN, self).__init__()
-        # have 2 layers, our 6 feed into 12 into 3
-        self.fc1 = nn.Linear(6, 12)
+        # have 2 layers, our 6 feed into 24 into 3
+        self.fc1 = nn.Linear(6, n_intermediate)
         # applies a fully connected linear transformation to our data
-        self.fc2 = nn.Linear(12, 3)
+        self.fc2 = nn.Linear(n_intermediate, 3)
 
     def forward(self, x):
         # just feeds forward
